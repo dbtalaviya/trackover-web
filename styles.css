@@ -1,15 +1,16 @@
 :root {
-  --bg: #07111f;
-  --bg-soft: #0d1a2d;
-  --panel: rgba(8, 19, 35, 0.68);
-  --panel-strong: rgba(9, 24, 43, 0.88);
-  --line: rgba(144, 204, 255, 0.14);
-  --text: #f4f8ff;
-  --muted: #9eb3c9;
-  --cyan: #6ce5ff;
-  --mint: #86ffc4;
-  --blue: #4b7dff;
-  --glow: rgba(108, 229, 255, 0.28);
+  --bg: #020406;
+  --bg-soft: #08111a;
+  --panel: rgba(7, 14, 22, 0.7);
+  --panel-strong: rgba(8, 17, 28, 0.9);
+  --line: rgba(134, 219, 255, 0.14);
+  --text: #f5f9ff;
+  --muted: #93a9c2;
+  --cyan: #67e8ff;
+  --mint: #7fffd6;
+  --blue: #4f7cff;
+  --ice: #d3e8ff;
+  --glow: rgba(103, 232, 255, 0.34);
 }
 
 * {
@@ -27,10 +28,10 @@ body {
   font-family: "IBM Plex Sans", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(75, 125, 255, 0.24), transparent 34%),
-    radial-gradient(circle at 80% 18%, rgba(108, 229, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 50% 85%, rgba(134, 255, 196, 0.1), transparent 24%),
-    linear-gradient(180deg, #08111f 0%, #050c17 100%);
+    radial-gradient(circle at 18% 10%, rgba(79, 124, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 80% 18%, rgba(103, 232, 255, 0.12), transparent 20%),
+    radial-gradient(circle at 50% 72%, rgba(127, 255, 214, 0.08), transparent 20%),
+    linear-gradient(180deg, #040608 0%, #020305 44%, #000000 100%);
   overflow-x: hidden;
 }
 
@@ -67,7 +68,7 @@ body::before {
   height: 260px;
   top: 120px;
   left: -70px;
-  background: rgba(75, 125, 255, 0.18);
+  background: rgba(79, 124, 255, 0.15);
 }
 
 .ambient-right {
@@ -75,7 +76,7 @@ body::before {
   height: 320px;
   right: -120px;
   top: 80px;
-  background: rgba(108, 229, 255, 0.12);
+  background: rgba(103, 232, 255, 0.1);
 }
 
 .grid-lines {
@@ -112,6 +113,29 @@ body::before {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--cyan);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  padding: 10px 14px;
+  border: 1px solid rgba(134, 219, 255, 0.14);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(7, 14, 22, 0.88), rgba(7, 14, 22, 0.54));
+  color: #d8e4f4;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 18px rgba(127, 255, 214, 0.5);
 }
 
 h1 {
@@ -151,7 +175,7 @@ h1 {
 .signal-row span {
   padding: 12px 16px;
   border-radius: 999px;
-  color: #dce7f6;
+  color: #dbe7f6;
   font-size: 0.95rem;
 }
 
@@ -186,6 +210,51 @@ h1 {
   min-height: 620px;
   display: grid;
   place-items: center;
+  isolation: isolate;
+}
+
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  inset: 8% 4% 10%;
+  border-radius: 36px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, rgba(79, 124, 255, 0.08), rgba(103, 232, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  z-index: -3;
+}
+
+.hero-visual::after {
+  content: "";
+  position: absolute;
+  inset: 18% 12%;
+  border-radius: 50%;
+  border: 1px dashed rgba(103, 232, 255, 0.08);
+  z-index: -2;
+}
+
+.visual-frame {
+  position: absolute;
+  inset: 4% 0;
+  border-radius: 42px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 50% 50%, rgba(79, 124, 255, 0.08), transparent 58%);
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  z-index: -4;
+}
+
+.glow-field {
+  position: absolute;
+  width: min(44vw, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(103, 232, 255, 0.14) 0%, rgba(79, 124, 255, 0.12) 36%, transparent 70%);
+  filter: blur(24px);
+  opacity: 0.95;
 }
 
 .globe {
@@ -195,14 +264,16 @@ h1 {
   min-width: 320px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 35% 30%, rgba(108, 229, 255, 0.38), transparent 22%),
-    radial-gradient(circle at 68% 60%, rgba(75, 125, 255, 0.22), transparent 26%),
-    linear-gradient(180deg, rgba(14, 53, 96, 0.95), rgba(5, 20, 39, 0.95));
+    radial-gradient(circle at 34% 26%, rgba(103, 232, 255, 0.34), transparent 18%),
+    radial-gradient(circle at 72% 62%, rgba(79, 124, 255, 0.28), transparent 24%),
+    radial-gradient(circle at 50% 50%, rgba(9, 29, 56, 0.8), transparent 62%),
+    linear-gradient(180deg, rgba(8, 30, 58, 0.98), rgba(2, 11, 22, 0.98));
   box-shadow:
     inset 0 0 0 1px rgba(159, 223, 255, 0.16),
-    inset 0 -40px 90px rgba(0, 0, 0, 0.22),
-    0 0 0 16px rgba(108, 229, 255, 0.03),
-    0 0 80px rgba(75, 125, 255, 0.22);
+    inset 0 -44px 110px rgba(0, 0, 0, 0.46),
+    0 0 0 16px rgba(103, 232, 255, 0.025),
+    0 0 120px rgba(79, 124, 255, 0.18);
+  overflow: hidden;
   animation: float 6.5s ease-in-out infinite;
 }
 
@@ -217,20 +288,79 @@ h1 {
 
 .globe::before {
   background:
-    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.18), transparent 10%),
-    radial-gradient(circle at 52% 36%, rgba(134, 255, 196, 0.18), transparent 8%),
-    radial-gradient(circle at 68% 56%, rgba(108, 229, 255, 0.12), transparent 12%);
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.16), transparent 8%),
+    radial-gradient(circle at 52% 36%, rgba(127, 255, 214, 0.14), transparent 8%),
+    radial-gradient(circle at 68% 56%, rgba(103, 232, 255, 0.12), transparent 12%);
   mix-blend-mode: screen;
 }
 
 .globe::after {
-  inset: 10%;
+  inset: 8%;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .globe-core {
   inset: 18%;
   border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scan,
+.continent,
+.pulse {
+  position: absolute;
+}
+
+.scan {
+  left: -10%;
+  right: -10%;
+  height: 20%;
+  background: linear-gradient(180deg, rgba(103, 232, 255, 0), rgba(103, 232, 255, 0.16), rgba(103, 232, 255, 0));
+  filter: blur(6px);
+  opacity: 0.7;
+}
+
+.scan-one {
+  top: 16%;
+  animation: sweep 9s linear infinite;
+}
+
+.scan-two {
+  top: 58%;
+  animation: sweep 11s linear infinite reverse;
+}
+
+.continent {
+  background: linear-gradient(135deg, rgba(127, 255, 214, 0.26), rgba(103, 232, 255, 0.08));
+  border: 1px solid rgba(127, 255, 214, 0.16);
+  filter: blur(0.2px);
+  opacity: 0.6;
+}
+
+.continent-a {
+  top: 28%;
+  left: 18%;
+  width: 28%;
+  height: 18%;
+  border-radius: 45% 55% 48% 52% / 52% 36% 64% 48%;
+  transform: rotate(-18deg);
+}
+
+.continent-b {
+  top: 24%;
+  right: 18%;
+  width: 18%;
+  height: 16%;
+  border-radius: 62% 38% 44% 56% / 44% 62% 38% 56%;
+  transform: rotate(22deg);
+}
+
+.continent-c {
+  bottom: 18%;
+  left: 36%;
+  width: 22%;
+  height: 14%;
+  border-radius: 54% 46% 64% 36% / 48% 58% 42% 52%;
+  transform: rotate(8deg);
 }
 
 .latitude,
@@ -280,7 +410,8 @@ h1 {
   height: 12px;
   border-radius: 50%;
   background: var(--mint);
-  box-shadow: 0 0 16px var(--glow);
+  box-shadow: 0 0 18px var(--glow);
+  z-index: 2;
 }
 
 .node-a {
@@ -302,14 +433,41 @@ h1 {
 .node-d {
   bottom: 18%;
   right: 34%;
-  background: #b6dcff;
+  background: var(--ice);
+}
+
+.pulse {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(103, 232, 255, 0.25);
+  opacity: 0.7;
+}
+
+.pulse-a {
+  top: 14.5%;
+  left: 29.8%;
+  animation: ping 3.4s ease-out infinite;
+}
+
+.pulse-b {
+  top: 38.5%;
+  right: 14.4%;
+  animation: ping 2.8s ease-out infinite 0.8s;
+}
+
+.pulse-c {
+  bottom: 12.4%;
+  right: 28.8%;
+  animation: ping 3.2s ease-out infinite 1.2s;
 }
 
 .beam {
   height: 2px;
   transform-origin: left center;
-  background: linear-gradient(90deg, rgba(134, 255, 196, 0), rgba(134, 255, 196, 0.9), rgba(108, 229, 255, 0));
-  box-shadow: 0 0 20px rgba(108, 229, 255, 0.32);
+  background: linear-gradient(90deg, rgba(127, 255, 214, 0), rgba(127, 255, 214, 0.9), rgba(103, 232, 255, 0));
+  box-shadow: 0 0 20px rgba(103, 232, 255, 0.32);
+  z-index: 1;
 }
 
 .beam-a {
@@ -337,24 +495,104 @@ h1 {
   position: absolute;
   border-radius: 50%;
   border: 1px solid rgba(179, 229, 255, 0.16);
+  box-shadow: inset 0 0 18px rgba(103, 232, 255, 0.06);
 }
 
 .ring-one {
   width: 116%;
   height: 72%;
   transform: rotate(12deg);
+  animation: spinSlow 18s linear infinite;
 }
 
 .ring-two {
   width: 112%;
   height: 52%;
   transform: rotate(-26deg);
+  animation: spinSlowReverse 22s linear infinite;
 }
 
 .ring-three {
   width: 82%;
   height: 112%;
   transform: rotate(18deg);
+  animation: spinSlow 26s linear infinite;
+}
+
+.flight-path {
+  position: absolute;
+  border-radius: 50%;
+  border-top: 1px solid rgba(103, 232, 255, 0.22);
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.path-one {
+  width: 124%;
+  height: 64%;
+  transform: rotate(-8deg);
+}
+
+.path-two {
+  width: 94%;
+  height: 124%;
+  transform: rotate(28deg);
+}
+
+.path-three {
+  width: 136%;
+  height: 84%;
+  transform: rotate(-36deg);
+}
+
+.satellite {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--ice));
+  box-shadow: 0 0 18px rgba(103, 232, 255, 0.44);
+}
+
+.satellite::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 1px;
+  background: rgba(211, 232, 255, 0.24);
+  transform: translate(-50%, -50%);
+}
+
+.satellite::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 32px;
+  background: rgba(211, 232, 255, 0.24);
+  transform: translate(-50%, -50%);
+}
+
+.satellite-a {
+  top: 18%;
+  right: 16%;
+  animation: orbitA 12s linear infinite;
+}
+
+.satellite-b {
+  bottom: 20%;
+  left: 12%;
+  animation: orbitB 14s linear infinite;
+}
+
+.satellite-c {
+  top: 50%;
+  right: 6%;
+  animation: orbitC 10s linear infinite;
 }
 
 .floating-card {
@@ -362,6 +600,7 @@ h1 {
   width: min(240px, 42%);
   padding: 16px 18px;
   border-radius: 18px;
+  background: linear-gradient(180deg, rgba(7, 14, 22, 0.84), rgba(8, 17, 28, 0.72));
 }
 
 .card-top {
@@ -386,6 +625,43 @@ h1 {
 .floating-card strong {
   font-weight: 600;
   line-height: 1.5;
+}
+
+.visual-hud {
+  position: absolute;
+  padding: 10px 12px;
+  border: 1px solid rgba(134, 219, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(6, 12, 19, 0.84);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.24);
+}
+
+.visual-hud-left {
+  left: 10%;
+  bottom: 28%;
+}
+
+.visual-hud-right {
+  right: 10%;
+  top: 28%;
+}
+
+.hud-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--cyan);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.visual-hud strong {
+  display: block;
+  color: #e7f0fb;
+  font-size: 0.92rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .info-band {
@@ -431,6 +707,69 @@ h1 {
   }
 }
 
+@keyframes ping {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  20%,
+  80% {
+    opacity: 0.75;
+  }
+
+  100% {
+    transform: translateY(160px);
+    opacity: 0;
+  }
+}
+
+@keyframes orbitA {
+  50% {
+    transform: translate(-18px, 12px);
+  }
+}
+
+@keyframes orbitB {
+  50% {
+    transform: translate(20px, -10px);
+  }
+}
+
+@keyframes orbitC {
+  50% {
+    transform: translate(-14px, -18px);
+  }
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(372deg);
+  }
+}
+
+@keyframes spinSlowReverse {
+  to {
+    transform: rotate(-386deg);
+  }
+}
+
 @media (max-width: 1080px) {
   .page-shell {
     width: min(100% - 28px, 1220px);
@@ -459,6 +798,10 @@ h1 {
     width: min(72vw, 460px);
   }
 
+  .glow-field {
+    width: min(80vw, 560px);
+  }
+
   .card-top {
     top: 8%;
     left: 4%;
@@ -467,6 +810,16 @@ h1 {
   .card-bottom {
     right: 4%;
     bottom: 8%;
+  }
+
+  .visual-hud-left {
+    left: 8%;
+    bottom: 24%;
+  }
+
+  .visual-hud-right {
+    right: 8%;
+    top: 24%;
   }
 
   .info-band {
@@ -493,6 +846,10 @@ h1 {
     line-height: 1.7;
   }
 
+  .hero-badge {
+    font-size: 0.84rem;
+  }
+
   .metric-strip {
     grid-template-columns: 1fr;
   }
@@ -504,6 +861,10 @@ h1 {
   .globe {
     min-width: 260px;
     width: min(78vw, 360px);
+  }
+
+  .glow-field {
+    width: min(88vw, 420px);
   }
 
   .floating-card {
@@ -520,6 +881,10 @@ h1 {
   .card-bottom {
     right: 0;
     bottom: 5%;
+  }
+
+  .visual-hud {
+    display: none;
   }
 
   .info-band {
