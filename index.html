@@ -3,130 +3,203 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrackOver | The Tracking Infrastructure You Need</title>
+    <title>Trackover</title>
     <meta
       name="description"
-      content="TrackOver is the tracking infrastructure for live location systems, built for any moving entity with real-time updates at scale."
+      content="Real-time tracking infrastructure for apps and devices."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: "#050A14",
+              cyan: "#67E8FF",
+              blue: "#4F7CFF",
+            },
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            maxWidth: {
+              hero: "1200px",
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <div class="page-shell">
-      <div class="ambient ambient-left" aria-hidden="true"></div>
-      <div class="ambient ambient-right" aria-hidden="true"></div>
-      <div class="grid-lines" aria-hidden="true"></div>
+  <body class="min-h-screen bg-ink font-sans text-white antialiased">
+    <main class="relative min-h-screen overflow-hidden">
+      <div
+        class="pointer-events-none absolute inset-0 opacity-[0.035]"
+        style="
+          background-image:
+            linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+          background-size: 56px 56px;
+        "
+      ></div>
 
-      <main class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">TrackOver.live</p>
-          <div class="hero-badge" aria-label="Product positioning">
-            <span class="badge-dot"></span>
-            Infrastructure for live movement intelligence
-          </div>
-          <h1>The tracking infrastructure you need.</h1>
-          <p class="summary">
-            Real-time tracking infrastructure for people, vehicles, aircraft,
-            buses, ships, and anything else that moves from A to B.
-          </p>
+      <div class="pointer-events-none absolute inset-x-0 top-[-10rem] mx-auto h-80 w-80 rounded-full bg-blue/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute bottom-[-12rem] right-[-6rem] h-96 w-96 rounded-full bg-cyan/10 blur-3xl"></div>
 
-          <div class="signal-row" aria-label="Platform highlights">
-            <span>Any device can publish</span>
-            <span>One to many or many to many</span>
-            <span>Built for real-time scale</span>
-          </div>
-
-          <div class="metric-strip" aria-label="Key product targets">
-            <article>
-              <strong>100K+</strong>
-              <span>active trips</span>
-            </article>
-            <article>
-              <strong>&lt; 5s</strong>
-              <span>update latency target</span>
-            </article>
-            <article>
-              <strong>10s</strong>
-              <span>location sync cadence</span>
-            </article>
-          </div>
-        </div>
-
-        <section class="hero-visual" aria-label="TrackOver network globe illustration">
-          <div class="visual-frame" aria-hidden="true"></div>
-          <div class="glow-field" aria-hidden="true"></div>
-          <div class="orbital-ring ring-one"></div>
-          <div class="orbital-ring ring-two"></div>
-          <div class="orbital-ring ring-three"></div>
-          <div class="flight-path path-one"></div>
-          <div class="flight-path path-two"></div>
-          <div class="flight-path path-three"></div>
-
-          <div class="globe">
-            <div class="scan scan-one"></div>
-            <div class="scan scan-two"></div>
-            <div class="globe-core"></div>
-            <span class="node node-a"></span>
-            <span class="node node-b"></span>
-            <span class="node node-c"></span>
-            <span class="node node-d"></span>
-            <span class="pulse pulse-a"></span>
-            <span class="pulse pulse-b"></span>
-            <span class="pulse pulse-c"></span>
-            <span class="beam beam-a"></span>
-            <span class="beam beam-b"></span>
-            <span class="beam beam-c"></span>
-            <span class="latitude latitude-one"></span>
-            <span class="latitude latitude-two"></span>
-            <span class="longitude longitude-one"></span>
-            <span class="longitude longitude-two"></span>
-            <span class="continent continent-a"></span>
-            <span class="continent continent-b"></span>
-            <span class="continent continent-c"></span>
+      <div class="mx-auto flex min-h-screen max-w-hero items-center px-8 py-20 sm:px-12 lg:px-16">
+        <section class="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,1fr)_760px] lg:gap-4">
+          <div class="group flex justify-start lg:justify-center">
+            <h1 class="flex max-w-[900px] flex-wrap items-baseline gap-x-[0.16em] gap-y-[0.04em] text-[72px] font-extrabold leading-[0.98] tracking-[-0.07em] text-white sm:text-[92px] lg:text-[112px]">
+              <span class="inline-block">SEE IT MOVE</span>
+              <span class="inline-block text-white/35 transition-all duration-500 group-hover:translate-x-2 group-hover:text-cyan">
+                LIVE
+              </span>
+            </h1>
           </div>
 
-          <span class="satellite satellite-a" aria-hidden="true"></span>
-          <span class="satellite satellite-b" aria-hidden="true"></span>
-          <span class="satellite satellite-c" aria-hidden="true"></span>
+          <div class="flex justify-center lg:justify-end lg:pl-10">
+            <div class="group relative h-[620px] w-[620px] sm:h-[780px] sm:w-[780px] lg:translate-x-10">
+              <div class="absolute inset-10 rounded-full bg-cyan/10 blur-3xl"></div>
+              <div class="absolute inset-0 rounded-full bg-blue/10 blur-[120px]"></div>
+              <svg
+                viewBox="0 0 560 560"
+                class="relative h-full w-full transition-transform duration-700 group-hover:scale-[1.04]"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="Minimal tracking globe"
+                role="img"
+              >
+                <defs>
+                  <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 280) rotate(90) scale(236)">
+                    <stop stop-color="#67E8FF" stop-opacity="0.18" />
+                    <stop offset="0.55" stop-color="#4F7CFF" stop-opacity="0.12" />
+                    <stop offset="1" stop-color="#4F7CFF" stop-opacity="0" />
+                  </radialGradient>
+                  <radialGradient id="sphere" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(222 180) rotate(58) scale(286)">
+                    <stop stop-color="#21436C" />
+                    <stop offset="0.52" stop-color="#0B1930" />
+                    <stop offset="1" stop-color="#040A13" />
+                  </radialGradient>
+                  <radialGradient id="surfaceGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(236 206) rotate(90) scale(150)">
+                    <stop stop-color="#8DEBFF" stop-opacity="0.18" />
+                    <stop offset="1" stop-color="#8DEBFF" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="route" x1="150" y1="150" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#67E8FF" stop-opacity="0" />
+                    <stop offset="0.5" stop-color="#67E8FF" />
+                    <stop offset="1" stop-color="#4F7CFF" stop-opacity="0" />
+                  </linearGradient>
+                  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="10" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <clipPath id="sphereClip">
+                    <circle cx="280" cy="280" r="164" />
+                  </clipPath>
+                  <path id="orbitPathA" d="M84 280C84 188.873 157.873 115 249 115C340.127 115 414 188.873 414 280C414 371.127 340.127 445 249 445C157.873 445 84 371.127 84 280Z" />
+                  <path id="orbitPathB" d="M128 280C128 214.278 186.278 156 258 156C329.722 156 388 214.278 388 280C388 345.722 329.722 404 258 404C186.278 404 128 345.722 128 280Z" />
+                  <path id="orbitPathC" d="M152 280C152 195.918 210.918 128 283.5 128C356.082 128 415 195.918 415 280C415 364.082 356.082 432 283.5 432C210.918 432 152 364.082 152 280Z" />
+                  <path id="signalPathA" d="M210 230C244 214 278 216 316 236" />
+                  <path id="signalPathB" d="M230 328C268 298 304 274 342 232" />
+                  <path id="signalPathC" d="M292 194C304 228 304 266 296 318" />
+                </defs>
 
-          <article class="floating-card card-top">
-            <span class="card-label">Live producers</span>
-            <strong>Phones, trackers, fleets, aircraft, assets.</strong>
-          </article>
+                <g>
+                  <animateTransform attributeName="transform" type="rotate" from="0 280 280" to="360 280 280" dur="36s" repeatCount="indefinite" />
+                  <ellipse cx="280" cy="280" rx="204" ry="112" stroke="rgba(103,232,255,0.18)" stroke-width="1.4" transform="rotate(10 280 280)" />
+                  <ellipse cx="280" cy="280" rx="182" ry="74" stroke="rgba(103,232,255,0.12)" stroke-width="1.4" transform="rotate(-24 280 280)" />
+                  <ellipse cx="280" cy="280" rx="114" ry="194" stroke="rgba(79,124,255,0.14)" stroke-width="1.4" transform="rotate(22 280 280)" />
+                </g>
 
-          <article class="floating-card card-bottom">
-            <span class="card-label">Consumers</span>
-            <strong>Operations, public maps, admin panels, shared links.</strong>
-          </article>
+                <circle cx="280" cy="280" r="236" fill="url(#glow)" />
 
-          <div class="visual-hud visual-hud-left" aria-hidden="true">
-            <span class="hud-label">Status</span>
-            <strong>Realtime sync active</strong>
-          </div>
+                <g>
+                  <animateTransform attributeName="transform" type="translate" values="0 0;0 -8;0 0" dur="7s" repeatCount="indefinite" />
+                  <circle cx="280" cy="280" r="164" fill="url(#sphere)" stroke="rgba(201,232,255,0.12)" />
+                  <circle cx="280" cy="280" r="164" fill="url(#surfaceGlow)" />
+                  <ellipse cx="280" cy="448" rx="108" ry="26" fill="rgba(0,0,0,0.28)" />
+                </g>
 
-          <div class="visual-hud visual-hud-right" aria-hidden="true">
-            <span class="hud-label">Coverage</span>
-            <strong>Global movement graph</strong>
+                <g clip-path="url(#sphereClip)" opacity="0.82">
+                  <animateTransform attributeName="transform" type="rotate" from="0 280 280" to="360 280 280" dur="28s" repeatCount="indefinite" />
+                  <ellipse cx="280" cy="280" rx="132" ry="164" stroke="rgba(201,232,255,0.12)" />
+                  <ellipse cx="280" cy="280" rx="82" ry="164" stroke="rgba(201,232,255,0.08)" />
+                  <ellipse cx="280" cy="280" rx="32" ry="164" stroke="rgba(201,232,255,0.08)" />
+                  <ellipse cx="280" cy="280" rx="164" ry="122" stroke="rgba(201,232,255,0.10)" />
+                  <ellipse cx="280" cy="280" rx="164" ry="74" stroke="rgba(201,232,255,0.08)" />
+                  <ellipse cx="280" cy="280" rx="164" ry="28" stroke="rgba(201,232,255,0.08)" />
+
+                  <path d="M196 192C240 162 287 160 324 184C358 206 364 246 342 279C315 322 264 341 218 325C186 314 172 286 176 252C179 228 185 208 196 192Z" fill="rgba(127,255,214,0.14)" />
+                  <path d="M312 210C338 194 370 198 392 217C414 236 414 268 397 292C378 320 348 331 322 321C296 310 287 286 290 260C293 242 300 224 312 210Z" fill="rgba(103,232,255,0.12)" />
+
+                  <path d="M178 248C194 226 216 210 244 206C272 202 300 210 326 224C334 228 341 233 346 238" stroke="url(#route)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <animate attributeName="stroke-dasharray" values="0 240;72 168;0 240" dur="4.2s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M202 334C218 322 232 310 248 296C262 284 274 272 286 262C300 250 314 238 330 226C342 218 352 213 362 218" stroke="url(#route)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <animate attributeName="stroke-dasharray" values="0 240;86 154;0 240" dur="4.8s" begin="0.8s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M300 178C308 194 313 212 315 232C317 250 316 268 313 286C311 304 308 320 304 334" stroke="url(#route)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <animate attributeName="stroke-dasharray" values="0 190;62 128;0 190" dur="3.9s" begin="0.4s" repeatCount="indefinite" />
+                  </path>
+
+                  <circle cx="212" cy="236" r="15" stroke="rgba(127,255,214,0.26)" stroke-width="1.2">
+                    <animate attributeName="r" values="9;22;9" dur="2.6s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.9;0;0.9" dur="2.6s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="336" cy="258" r="15" stroke="rgba(103,232,255,0.24)" stroke-width="1.2">
+                    <animate attributeName="r" values="9;20;9" dur="2.2s" begin="0.6s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.9;0;0.9" dur="2.2s" begin="0.6s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="248" cy="352" r="15" stroke="rgba(221,246,255,0.22)" stroke-width="1.2">
+                    <animate attributeName="r" values="9;20;9" dur="2.4s" begin="1s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.9;0;0.9" dur="2.4s" begin="1s" repeatCount="indefinite" />
+                  </circle>
+                </g>
+
+                <g class="transition-all duration-700 group-hover:opacity-100" opacity="0.72">
+                  <g filter="url(#softGlow)">
+                    <g>
+                      <animateTransform attributeName="transform" type="rotate" from="0 280 280" to="360 280 280" dur="22s" repeatCount="indefinite" />
+                      <g transform="translate(444 154)">
+                        <rect x="-8" y="-6" width="16" height="12" rx="2.5" fill="rgba(7,19,34,0.92)" stroke="rgba(221,246,255,0.9)" stroke-width="1.4" />
+                        <rect x="-18" y="-4" width="8" height="8" rx="1.5" fill="rgba(7,19,34,0.88)" stroke="rgba(103,232,255,0.82)" stroke-width="1.2" />
+                        <rect x="10" y="-4" width="8" height="8" rx="1.5" fill="rgba(7,19,34,0.88)" stroke="rgba(103,232,255,0.82)" stroke-width="1.2" />
+                        <path d="M-4 -10L0 -18L4 -10" stroke="rgba(221,246,255,0.86)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M0 6V16" stroke="rgba(221,246,255,0.82)" stroke-width="1.3" stroke-linecap="round" />
+                        <path d="M-4 16H4" stroke="rgba(221,246,255,0.72)" stroke-width="1.3" stroke-linecap="round" />
+                        <circle cx="0" cy="0" r="1.5" fill="#DDF6FF" />
+                      </g>
+                    </g>
+                  </g>
+
+                  <path d="M430 166C394 182 360 208 330 240" stroke="rgba(103,232,255,0.34)" stroke-width="1.6" stroke-dasharray="6 8">
+                    <animate attributeName="stroke-dashoffset" values="0;-28" dur="1.8s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M424 172C388 194 352 222 320 262" stroke="rgba(79,124,255,0.24)" stroke-width="1.2" stroke-dasharray="4 10">
+                    <animate attributeName="stroke-dashoffset" values="0;-24" dur="1.5s" repeatCount="indefinite" />
+                  </path>
+                </g>
+
+              </svg>
+            </div>
           </div>
         </section>
-      </main>
+      </div>
 
-      <section class="info-band">
-        <p>
-          Producer sends location. Consumers see it in real time. Private access,
-          shared links, public visibility, and future route intelligence all sit on
-          top of the same tracking core.
-        </p>
-      </section>
-
-      <footer class="footer">
-        <p class="coming-soon">Coming soon</p>
-      </footer>
-    </div>
+      <div class="pointer-events-none absolute inset-x-0 bottom-8 px-8 sm:px-12 lg:px-16">
+        <div class="mx-auto max-w-hero">
+          <p class="text-sm font-semibold tracking-[0.24em] text-white/55">
+            TRACKOVER.LIVE
+          </p>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
