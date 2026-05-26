@@ -34,8 +34,12 @@
         },
       };
     </script>
+    <script src="/js/config.js"></script>
   </head>
   <body class="h-screen overflow-hidden bg-ink font-sans text-white antialiased">
+    <header class="absolute inset-x-0 top-0 z-20 flex items-center justify-end px-6 py-5 sm:px-10">
+      <div id="user-area" class="text-sm text-white/40">…</div>
+    </header>
     <main class="relative h-screen overflow-hidden">
       <div
         class="pointer-events-none absolute inset-0 opacity-[0.035]"
@@ -201,5 +205,69 @@
         </div>
       </div>
     </main>
+
+    <script>
+      (function () {
+        var cfg = window.TrackoverConfig;
+        var area = document.getElementById("user-area");
+
+        function render(clerk) {
+          area.innerHTML = "";
+          if (!clerk.user) {
+            var btn = document.createElement("button");
+            btn.textContent = "Sign in";
+            btn.className =
+              "rounded-lg bg-cyan px-3.5 py-1.5 text-xs font-semibold text-ink hover:bg-cyan/80";
+            btn.onclick = function () {
+              clerk.openSignIn({ redirectUrl: window.location.href });
+            };
+            area.appendChild(btn);
+            return;
+          }
+          var email = document.createElement("span");
+          email.className = "mr-3 text-white/70";
+          email.textContent =
+            (clerk.user.primaryEmailAddress &&
+              clerk.user.primaryEmailAddress.emailAddress) ||
+            clerk.user.id;
+          var out = document.createElement("button");
+          out.textContent = "Sign out";
+          out.className =
+            "rounded-md border border-white/15 px-2.5 py-1 text-xs text-white/70 hover:text-white";
+          out.onclick = function () {
+            clerk.signOut().then(function () {
+              window.location.reload();
+            });
+          };
+          area.append(email, out);
+        }
+
+        var s = document.createElement("script");
+        s.src =
+          "https://" +
+          cfg.CLERK_DOMAIN +
+          "/npm/@clerk/clerk-js@5/dist/clerk.browser.js";
+        s.async = true;
+        s.crossOrigin = "anonymous";
+        s.dataset.clerkPublishableKey = cfg.CLERK_PUBLISHABLE_KEY;
+        s.onload = function () {
+          window.Clerk.load()
+            .then(function () {
+              render(window.Clerk);
+              window.Clerk.addListener(function () {
+                render(window.Clerk);
+              });
+            })
+            .catch(function (err) {
+              area.textContent = "auth unavailable";
+              console.error(err);
+            });
+        };
+        s.onerror = function () {
+          area.textContent = "auth unavailable";
+        };
+        document.head.appendChild(s);
+      })();
+    </script>
   </body>
 </html>
