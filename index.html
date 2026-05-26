@@ -56,13 +56,27 @@
 
       <div class="mx-auto flex h-full max-w-hero items-center px-8 py-10 sm:px-12 lg:px-16">
         <section class="grid w-full items-center gap-8 lg:grid-cols-[minmax(0,1fr)_720px] lg:gap-4">
-          <div class="group flex justify-start lg:justify-center">
+          <div class="group flex flex-col items-start gap-10 lg:items-center">
             <h1 class="flex max-w-[900px] flex-wrap items-baseline gap-x-[0.16em] gap-y-[0.04em] text-[64px] font-extrabold leading-[0.98] tracking-[-0.07em] text-white sm:text-[84px] lg:text-[100px]">
               <span class="inline-block">SEE IT MOVE</span>
               <span class="inline-block text-white/35 transition-all duration-500 group-hover:translate-x-2 group-hover:text-cyan">
                 LIVE
               </span>
             </h1>
+            <div class="flex w-full flex-wrap items-center gap-3 lg:justify-center">
+              <a
+                href="/producer"
+                class="inline-flex items-center gap-2 rounded-xl bg-cyan px-5 py-3 text-sm font-semibold text-ink transition hover:bg-cyan/80"
+              >
+                Create a trip
+              </a>
+              <button
+                id="view-trip-btn"
+                class="inline-flex items-center gap-2 rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/5"
+              >
+                View a trip
+              </button>
+            </div>
           </div>
 
           <div class="flex justify-center lg:justify-end lg:pl-6">
@@ -267,6 +281,22 @@
           area.textContent = "auth unavailable";
         };
         document.head.appendChild(s);
+      })();
+    </script>
+
+    <script>
+      // "View a trip" — ask for a trip ID and open the live consumer view.
+      // Uses the ?id= form so it resolves on any static host (Live Server,
+      // local servers) as well as GitHub Pages.
+      (function () {
+        var btn = document.getElementById("view-trip-btn");
+        if (!btn) return;
+        btn.addEventListener("click", function () {
+          var id = window.prompt("Enter the trip ID to view:");
+          if (id && id.trim()) {
+            window.location.href = "/track/?id=" + encodeURIComponent(id.trim());
+          }
+        });
       })();
     </script>
   </body>
