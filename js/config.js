@@ -11,6 +11,9 @@ window.TrackoverConfig = {
     // 3000ms = 3s is a sensible default; bump for slower-moving fleets.
     POLL_INTERVAL_MS: 3000,
 
+    // How often the producer page POSTs its current device location, in ms.
+    PRODUCER_SEND_INTERVAL_MS: 5000,
+
     // Clerk frontend config — both values come from the Clerk Dashboard
     // (Developers → API Keys → Show API Keys → "Publishable key" and "Frontend API URL")
     CLERK_PUBLISHABLE_KEY: "pk_test_c3dlZXBpbmctbGVlY2gtMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",

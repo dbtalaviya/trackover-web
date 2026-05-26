@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Trackover — Producer</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""
+        />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            ink: "#050A14",
+                            cyan: "#67E8FF",
+                            blue: "#4F7CFF",
+                        },
+                        fontFamily: {
+                            sans: [
+                                "Inter",
+                                "ui-sans-serif",
+                                "system-ui",
+                                "sans-serif",
+                            ],
+                        },
+                    },
+                },
+            }
+        </script>
+        <script src="/js/config.js"></script>
+        <style>
+            html,
+            body,
+            #map {
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body class="bg-ink font-sans text-white antialiased">
+        <div id="map" class="absolute inset-0 z-0"></div>
+
+        <!-- top bar -->
+        <header
+            class="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-ink/70 border-b border-white/10"
+        >
+            <a href="/" class="flex items-center gap-2">
+                <span class="text-sm font-semibold tracking-[0.24em] text-white/80"
+                    >TRACKOVER.LIVE</span
+                >
+            </a>
+            <div id="user-area" class="flex items-center gap-3 text-sm">
+                <span class="text-white/40">Loading…</span>
+            </div>
+        </header>
+
+        <!-- control panel -->
+        <section
+            class="absolute bottom-4 left-4 right-4 sm:left-4 sm:right-auto sm:w-[380px] z-10 rounded-xl border border-white/10 bg-ink/85 p-5 backdrop-blur-md shadow-2xl"
+        >
+            <div class="flex items-center justify-between">
+                <p class="text-xs uppercase tracking-widest text-white/45">
+                    Producer
+                </p>
+                <div class="flex items-center gap-2">
+                    <span
+                        id="status-dot"
+                        class="h-2 w-2 rounded-full bg-white/30"
+                    ></span>
+                    <span id="status-text" class="text-xs text-white/70">idle</span>
+                </div>
+            </div>
+
+            <!-- step 1: start a trip -->
+            <form id="trip-form" class="mt-4 space-y-3">
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-white/45"
+                        >Trip name</label
+                    >
+                    <input
+                        id="f-tripName"
+                        type="text"
+                        required
+                        placeholder="Morning route 12"
+                        class="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-cyan/60"
+                    />
+                </div>
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-white/45"
+                        >Producer ID</label
+                    >
+                    <input
+                        id="f-producerId"
+                        type="text"
+                        required
+                        placeholder="auto-filled from your account"
+                        class="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-cyan/60"
+                    />
+                </div>
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-white/45"
+                        >Visibility</label
+                    >
+                    <select
+                        id="f-visibility"
+                        class="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-cyan/60"
+                    >
+                        <option value="private">Private</option>
+                        <option value="public">Public</option>
+                        <option value="shared">Shared</option>
+                    </select>
+                </div>
+                <button
+                    id="btn-start-trip"
+                    type="submit"
+                    class="w-full rounded-lg bg-cyan px-4 py-2.5 text-sm font-semibold text-ink hover:bg-cyan/80 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                    Start trip
+                </button>
+            </form>
+
+            <!-- step 2: active trip + broadcast -->
+            <div id="trip-active" class="mt-4 hidden space-y-4">
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-white/45">
+                        Trip
+                    </p>
+                    <p
+                        id="trip-id"
+                        class="mt-0.5 font-mono text-sm break-all text-white/90"
+                    >
+                        —
+                    </p>
+                    <div class="mt-2 flex items-center gap-2">
+                        <button
+                            id="btn-copy"
+                            class="rounded-md border border-white/15 px-2.5 py-1 text-xs text-white/70 hover:text-white"
+                        >
+                            Copy link
+                        </button>
+                        <a
+                            id="btn-open"
+                            target="_blank"
+                            rel="noopener"
+                            class="rounded-md border border-white/15 px-2.5 py-1 text-xs text-white/70 hover:text-white"
+                        >
+                            Open live view ↗
+                        </a>
+                    </div>
+                </div>
+
+                <button
+                    id="btn-broadcast"
+                    class="w-full rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-ink hover:bg-emerald-400"
+                >
+                    Start broadcasting
+                </button>
+
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-white/45">
+                            Lat
+                        </p>
+                        <p id="lat" class="font-mono text-white/90">—</p>
+                    </div>
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-white/45">
+                            Lng
+                        </p>
+                        <p id="lng" class="font-mono text-white/90">—</p>
+                    </div>
+                </div>
+                <p class="text-xs text-white/45">
+                    Sent <span id="sent-count" class="font-mono">0</span> ·
+                    last <span id="last-sent" class="font-mono">—</span>
+                </p>
+            </div>
+
+            <p id="msg" class="mt-3 hidden text-xs text-rose-300"></p>
+        </section>
+
+        <!-- overlay: sign-in gate / fatal errors -->
+        <div
+            id="overlay"
+            class="absolute inset-0 z-20 flex items-center justify-center bg-ink/80 backdrop-blur"
+        >
+            <div
+                class="max-w-sm rounded-2xl border border-white/10 bg-ink/95 p-8 text-center shadow-2xl"
+            >
+                <p id="overlay-title" class="text-lg font-semibold">Loading…</p>
+                <p id="overlay-body" class="mt-2 text-sm text-white/60"></p>
+                <button
+                    id="overlay-action"
+                    class="mt-6 hidden rounded-lg bg-cyan px-4 py-2 text-sm font-semibold text-ink hover:bg-cyan/80"
+                ></button>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+        <script type="module">
+            const cfg = window.TrackoverConfig
+            const SEND_INTERVAL_MS = cfg.PRODUCER_SEND_INTERVAL_MS || 5000
+
+            // ---- overlay helpers ----------------------------------------------------
+            const overlay = document.getElementById("overlay")
+            const overlayTitle = document.getElementById("overlay-title")
+            const overlayBody = document.getElementById("overlay-body")
+            const overlayAction = document.getElementById("overlay-action")
+
+            function showOverlay(title, body, actionLabel, actionFn) {
+                overlayTitle.textContent = title
+                overlayBody.textContent = body || ""
+                if (actionLabel) {
+                    overlayAction.textContent = actionLabel
+                    overlayAction.classList.remove("hidden")
+                    overlayAction.onclick = actionFn
+                } else {
+                    overlayAction.classList.add("hidden")
+                    overlayAction.onclick = null
+                }
+                overlay.classList.remove("hidden")
+            }
+            function hideOverlay() {
+                overlay.classList.add("hidden")
+            }
+
+            // ---- inline message + status -------------------------------------------
+            const msgEl = document.getElementById("msg")
+            function showMsg(text, tone = "error") {
+                msgEl.textContent = text
+                msgEl.className =
+                    "mt-3 text-xs " +
+                    (tone === "error" ? "text-rose-300" : "text-emerald-300")
+                msgEl.classList.remove("hidden")
+            }
+            function clearMsg() {
+                msgEl.classList.add("hidden")
+            }
+
+            const dot = document.getElementById("status-dot")
+            const statusText = document.getElementById("status-text")
+            function setStatus(state) {
+                // state: "live" | "waiting" | "error" | "idle"
+                dot.className =
+                    "h-2 w-2 rounded-full " +
+                    {
+                        live: "bg-emerald-400 shadow-[0_0_10px_2px] shadow-emerald-400/60 animate-pulse",
+                        waiting: "bg-amber-400",
+                        error: "bg-rose-500",
+                        idle: "bg-white/30",
+                    }[state]
+                statusText.textContent = {
+                    live: "broadcasting",
+                    waiting: "locating…",
+                    error: "error",
+                    idle: "idle",
+                }[state]
+            }
+
+            // ---- map setup ----------------------------------------------------------
+            const map = L.map("map", { zoomControl: true }).setView(
+                cfg.MAP.FALLBACK_CENTER,
+                4,
+            )
+            L.tileLayer(cfg.MAP.TILE_URL, {
+                attribution: cfg.MAP.TILE_ATTRIBUTION,
+                maxZoom: 19,
+            }).addTo(map)
+
+            let marker = null
+            function renderLocation(lat, lng) {
+                if (!marker) {
+                    marker = L.marker([lat, lng]).addTo(map)
+                    map.setView([lat, lng], cfg.MAP.DEFAULT_ZOOM)
+                } else {
+                    marker.setLatLng([lat, lng])
+                }
+            }
+
+            // ---- Clerk loader -------------------------------------------------------
+            function loadClerk() {
+                return new Promise((resolve, reject) => {
+                    const s = document.createElement("script")
+                    s.src = `https://${cfg.CLERK_DOMAIN}/npm/@clerk/clerk-js@5/dist/clerk.browser.js`
+                    s.async = true
+                    s.crossOrigin = "anonymous"
+                    s.dataset.clerkPublishableKey = cfg.CLERK_PUBLISHABLE_KEY
+                    s.onload = async () => {
+                        try {
+                            await window.Clerk.load()
+                            resolve(window.Clerk)
+                        } catch (e) {
+                            reject(e)
+                        }
+                    }
+                    s.onerror = () => reject(new Error("Failed to load Clerk JS"))
+                    document.head.appendChild(s)
+                })
+            }
+
+            // ---- API client ---------------------------------------------------------
+            // Fetches a fresh session token per request (Clerk tokens are short-lived).
+            async function api(clerk, path, body) {
+                const token = await clerk.session.getToken()
+                const res = await fetch(`${cfg.API_BASE}${path}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(body),
+                })
+                const json = await res.json().catch(() => null)
+                return { status: res.status, body: json }
+            }
+
+            // ---- user area + sign-in/out -------------------------------------------
+            function renderUserArea(clerk) {
+                const el = document.getElementById("user-area")
+                el.innerHTML = ""
+                if (!clerk.user) {
+                    const btn = document.createElement("button")
+                    btn.textContent = "Sign in"
+                    btn.className =
+                        "rounded-lg bg-cyan px-3 py-1.5 text-xs font-semibold text-ink hover:bg-cyan/80"
+                    btn.onclick = () =>
+                        clerk.openSignIn({ redirectUrl: window.location.href })
+                    el.appendChild(btn)
+                    return
+                }
+                const email = document.createElement("span")
+                email.className = "text-white/70"
+                email.textContent =
+                    clerk.user.primaryEmailAddress?.emailAddress || clerk.user.id
+                const signOut = document.createElement("button")
+                signOut.textContent = "Sign out"
+                signOut.className =
+                    "rounded-md border border-white/15 px-2.5 py-1 text-xs text-white/70 hover:text-white"
+                signOut.onclick = () =>
+                    clerk.signOut().then(() => window.location.reload())
+                el.append(email, signOut)
+            }
+
+            // ---- trip + broadcast state --------------------------------------------
+            let tripId = null
+            let watchId = null // navigator.geolocation watch handle
+            let sendTimer = null // setInterval handle
+            let lastPos = null // { lat, lng } most recent device fix
+            let sentCount = 0
+            let broadcasting = false
+
+            const tripForm = document.getElementById("trip-form")
+            const tripActive = document.getElementById("trip-active")
+            const btnStartTrip = document.getElementById("btn-start-trip")
+            const btnBroadcast = document.getElementById("btn-broadcast")
+
+            // ---- step 1: start a trip ----------------------------------------------
+            async function startTrip(clerk) {
+                clearMsg()
+                const producerId = document
+                    .getElementById("f-producerId")
+                    .value.trim()
+                const tripName = document.getElementById("f-tripName").value.trim()
+                const visibility = document.getElementById("f-visibility").value
+                if (!producerId || !tripName) {
+                    showMsg("Trip name and producer ID are required.")
+                    return
+                }
+
+                btnStartTrip.disabled = true
+                btnStartTrip.textContent = "Starting…"
+                try {
+                    const { status, body } = await api(clerk, "/v1/producer/trip", {
+                        producerId,
+                        tripName,
+                        visibility,
+                    })
+                    if (status === 200 && body?.result) {
+                        tripId = body.result.tripId
+                        onTripStarted()
+                    } else if (status === 401 || status === 403) {
+                        showMsg(
+                            body?.error?.message ||
+                                "You don't have permission to start a trip.",
+                        )
+                    } else {
+                        showMsg(
+                            body?.error?.message || `Failed to start trip (HTTP ${status}).`,
+                        )
+                    }
+                } catch (err) {
+                    showMsg(`Network error: ${err.message}`)
+                } finally {
+                    btnStartTrip.disabled = false
+                    btnStartTrip.textContent = "Start trip"
+                }
+            }
+
+            function onTripStarted() {
+                tripForm.classList.add("hidden")
+                tripActive.classList.remove("hidden")
+                document.getElementById("trip-id").textContent = tripId
+                // Query-param form works on any static host (Live Server, local
+                // servers) — the pretty path /track/<id> only resolves on GitHub
+                // Pages via its 404.html rerouter.
+                const liveUrl = `${window.location.origin}/track/?id=${encodeURIComponent(
+                    tripId,
+                )}`
+                document.getElementById("btn-open").href = liveUrl
+                document.getElementById("btn-copy").onclick = async () => {
+                    try {
+                        await navigator.clipboard.writeText(liveUrl)
+                        showMsg("Tracking link copied.", "ok")
+                    } catch {
+                        showMsg(liveUrl)
+                    }
+                }
+                setStatus("idle")
+            }
+
+            // ---- step 2: broadcast live location -----------------------------------
+            async function pushLocation(clerk) {
+                if (!lastPos) return // no fix yet
+                try {
+                    const { status, body } = await api(
+                        clerk,
+                        `/v1/producer/trip/${encodeURIComponent(tripId)}/location`,
+                        { lat: lastPos.lat, lng: lastPos.lng, ts: Date.now() },
+                    )
+                    if (status === 200 && body?.result?.accepted) {
+                        sentCount += 1
+                        document.getElementById("sent-count").textContent = sentCount
+                        document.getElementById("last-sent").textContent =
+                            new Date().toLocaleTimeString()
+                        setStatus("live")
+                        clearMsg()
+                    } else if (status === 401 || status === 403) {
+                        showMsg(
+                            body?.error?.message ||
+                                "Permission denied while sending location.",
+                        )
+                        stopBroadcast()
+                        setStatus("error")
+                    } else {
+                        // 404 (trip gone) / 400 (not active / expired) etc.
+                        showMsg(
+                            body?.error?.message || `Send failed (HTTP ${status}).`,
+                        )
+                        setStatus("error")
+                    }
+                } catch (err) {
+                    showMsg(`Network error: ${err.message}`)
+                    setStatus("error")
+                }
+            }
+
+            function startBroadcast(clerk) {
+                if (!("geolocation" in navigator)) {
+                    showMsg("Geolocation is not supported in this browser.")
+                    return
+                }
+                broadcasting = true
+                btnBroadcast.textContent = "Stop broadcasting"
+                btnBroadcast.className =
+                    "w-full rounded-lg bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-400"
+                setStatus("waiting")
+
+                // Keep the freshest device fix in lastPos; draw it on the map.
+                watchId = navigator.geolocation.watchPosition(
+                    (pos) => {
+                        lastPos = {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                        }
+                        document.getElementById("lat").textContent =
+                            lastPos.lat.toFixed(6)
+                        document.getElementById("lng").textContent =
+                            lastPos.lng.toFixed(6)
+                        renderLocation(lastPos.lat, lastPos.lng)
+                    },
+                    (err) => {
+                        showMsg(`Location error: ${err.message}`)
+                        setStatus("error")
+                    },
+                    { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 },
+                )
+
+                // POST the latest known position every interval (default 5s).
+                pushLocation(clerk)
+                sendTimer = setInterval(() => pushLocation(clerk), SEND_INTERVAL_MS)
+            }
+
+            function stopBroadcast() {
+                broadcasting = false
+                if (sendTimer) {
+                    clearInterval(sendTimer)
+                    sendTimer = null
+                }
+                if (watchId !== null) {
+                    navigator.geolocation.clearWatch(watchId)
+                    watchId = null
+                }
+                btnBroadcast.textContent = "Start broadcasting"
+                btnBroadcast.className =
+                    "w-full rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-ink hover:bg-emerald-400"
+                setStatus("idle")
+            }
+
+            window.addEventListener("beforeunload", stopBroadcast)
+
+            // ---- bootstrap ----------------------------------------------------------
+            ;(async () => {
+                showOverlay("Loading…", "Signing you in.")
+                try {
+                    const clerk = await loadClerk()
+                    renderUserArea(clerk)
+
+                    const gateOrEnable = () => {
+                        renderUserArea(clerk)
+                        if (clerk.user) {
+                            hideOverlay()
+                            const pidEl = document.getElementById("f-producerId")
+                            if (!pidEl.value) pidEl.value = clerk.user.id
+                        } else {
+                            stopBroadcast()
+                            showOverlay(
+                                "Sign in to broadcast",
+                                "Starting a trip is gated behind your Clerk account.",
+                                "Sign in",
+                                () =>
+                                    clerk.openSignIn({
+                                        redirectUrl: window.location.href,
+                                    }),
+                            )
+                        }
+                    }
+
+                    clerk.addListener(gateOrEnable)
+                    gateOrEnable()
+
+                    tripForm.addEventListener("submit", (e) => {
+                        e.preventDefault()
+                        startTrip(clerk)
+                    })
+                    btnBroadcast.addEventListener("click", () => {
+                        if (broadcasting) stopBroadcast()
+                        else startBroadcast(clerk)
+                    })
+                } catch (e) {
+                    showOverlay("Failed to initialize", e.message)
+                }
+            })()
+        </script>
+    </body>
+</html>
